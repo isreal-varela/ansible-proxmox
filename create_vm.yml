@@ -1,0 +1,24 @@
+- name: Create new vm
+  hosts: 192.168.100.10
+  gather_facts: false
+
+  vars_files:
+    - vars/secret.yml
+
+  tasks:
+  - name: Create new vm with minimal options
+    vars:
+      ansible_python_interpreter: /usr/bin/python3
+    proxmox:
+      api_user: "{{ api_user }}"
+      api_token_id: "{{ api_token_id }}"
+      api_token_secret: "{{ api_token_secret }}"
+      api_host: 192.168.100.10
+      node: pve1
+      vmid: 103
+      hostname: gitlab
+      ostemplate: 'local:vztmpl/debian-11-turnkey-gitlab_17.1-1_amd64.tar.gz'
+      cores: 2
+      netif: '{"net0":"name=eth0,gw=192.168.100.1,ip=192.168.100.9/24,bridge=vmbr0"}'
+      disk: 'local-lvm:20'
+      memory: 4096
